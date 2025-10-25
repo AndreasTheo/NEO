@@ -467,24 +467,9 @@ def make_plots(data, experiment_agents, plot_file_name="", plot_title = '_', cum
     #data = load_data(experiment_dir, experiment_agents) # [alg][instance][episode]
     # TODO: 
     #print(np.shape(data))
-
-
-    print('data:', np.shape(data))
-
+    
     #data is of size data: (1, 50, 250)
     #consisting of 50 instances of 250 episodes each
-
-    success_data = copy.deepcopy(data)
-    for i in range(len(data)):
-        for j in range(len(data[i])):
-            found_goal = 0
-            for k in range(len(data[i][j])):
-                if success_data[i][j][k] == 100:
-                    found_goal = 1
-                if found_goal == 1:
-                    success_data[i][j][k] = 100
-
-    print('new:', np.shape(data))
 
     # Average the data.
     avg_data = average_data(data, cumulative=cumulative)
