@@ -591,29 +591,22 @@ class AgentQ2:
             _v = v[:, o].T
 
         if method  == 'cover_options':
-            cover_new_G = copy.deepcopy(new_G)
-            for i in range(len(self.prev_co_links)):
-                cover_new_G.add_edge(self.prev_co_links[i][0],self.prev_co_links[i][1])
-                cover_new_G.add_edge(self.prev_co_links[i][1],self.prev_co_links[i][0])
+			cover_new_G = copy.deepcopy(new_G)
             options = []
             N = num_options
             fiedler_vecs = []
-            for op in range(N):
-                        binary_flip = [False, True]
-                        for bool in binary_flip:
+            while(len(fiedler_vecs)<N):
+                        vals = nx.fiedler_vector(cover_new_G, weight='weight', normalized=False, tol=1e-08, method='tracemin_pcg', seed=None)
+                        highest_point = node_idxs[np.argmax(vals)]
+                        lowest_point = node_idxs[np.argmin(vals)]
+                        for bool in [False, True]:
                             if len(options) < N:
-                                vals = nx.fiedler_vector(cover_new_G, weight='weight', normalized=False, tol=1e-08, method='tracemin_pcg', seed=None)
-                                fiedler_vecs.append(vals)
                                 if bool:
-                                    highest_point = node_idxs[np.argmax(vals)]
-                                    lowest_point = node_idxs[np.argmin(vals)]
+                                    fiedler_vecs.append(vals)
                                 else:
-                                    highest_point = node_idxs[np.argmin(vals)]
-                                    lowest_point = node_idxs[np.argmax(vals)]
+                                    fiedler_vecs.append(-vals)
                         cover_new_G.add_edge(lowest_point, highest_point, weight=1)
                         cover_new_G.add_edge(highest_point, lowest_point, weight=1)
-                        self.prev_co_links.append([lowest_point,highest_point])
-                        op += 1
         vec_list = []
 
         for i in range(num_options):
