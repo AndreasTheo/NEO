@@ -471,12 +471,8 @@ def make_plots(data, experiment_agents, plot_file_name="", plot_title = '_', cum
 
     print('data:', np.shape(data))
 
-
     #data is of size data: (1, 50, 250)
     #consisting of 50 instances of 250 episodes each
-    #i want to modify the data to express the first time a goal is achieve which gives a reward of 100
-    #i want to loop through each instance and when the first goal is achieved in the 250 data points, I want to replace the rest of the data with 100
-    #for each instance, I want to replace the rest of the data with 100
 
     success_data = copy.deepcopy(data)
     for i in range(len(data)):
@@ -487,10 +483,8 @@ def make_plots(data, experiment_agents, plot_file_name="", plot_title = '_', cum
                     found_goal = 1
                 if found_goal == 1:
                     success_data[i][j][k] = 100
-    
 
     print('new:', np.shape(data))
-
 
     # Average the data.
     avg_data = average_data(data, cumulative=cumulative)
